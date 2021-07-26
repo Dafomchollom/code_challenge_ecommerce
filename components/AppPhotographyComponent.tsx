@@ -19,6 +19,8 @@ const AppPhotographyComponent: React.FC<AppPhotographyInterface> = ({
   // sort state
   const [sortString, setSortString] = React.useState<string>('none');
   // sort state
+  const [isFilter, setFilterState] = React.useState<Boolean>(true);
+  // sort state
   const [mutatProductsList, setMutatProductsList] = React.useState<
     Array<ProductInterface>
   >([]);
@@ -46,6 +48,8 @@ const AppPhotographyComponent: React.FC<AppPhotographyInterface> = ({
     sortProducts(e.target.value);
     setSortString(e.target.value);
   };
+  // filter options
+  const filterHandler = () => {};
   React.useEffect(() => {
     setMutatProductsList(products);
     // sortProducts(sortString);
@@ -57,7 +61,16 @@ const AppPhotographyComponent: React.FC<AppPhotographyInterface> = ({
           Photography /
           <span className={classes.headerLight}> Premium Photos</span>
         </h3>
-        <div className={classes.filterWrapper}>
+        <IconButton
+          edge="start"
+          className={classes.filterIcon}
+          color="inherit"
+          aria-label="menu"
+          onClick={() => setFilterState(true)}
+        >
+          <Image src="/images/filter.svg" width={30} height={30} alt="" />
+        </IconButton>
+        <div className={classes.sortWrapper}>
           <IconButton
             edge="start"
             className={classes.sortIcon}
@@ -87,10 +100,30 @@ const AppPhotographyComponent: React.FC<AppPhotographyInterface> = ({
       <div className={classes.bodyWrapper}>
         <Grid container spacing={3} justifyContent="space-between">
           <Grid item sm={12} md={4}>
-            <AppFilterComponent
-              categories={categories}
-              priceRange={priceRange}
-            />
+            <div
+              className={classes.filterWrapper}
+              style={{ display: isFilter ? 'inline-block' : 'none' }}
+            >
+              {/* <IconButton
+                edge="start"
+                className={classes.cancelIcon}
+                color="inherit"
+                aria-label="menu"
+                // onClick={() => removeItemhandler(item.id)}
+              >
+                <Image
+                  src="/images/cancelIcon.svg"
+                  width={15}
+                  height={15}
+                  alt=""
+                />
+              </IconButton> */}
+              <AppFilterComponent
+                categories={categories}
+                priceRange={priceRange}
+                onCancel={() => setFilterState(false)}
+              />
+            </div>
           </Grid>
           <Grid item sm={12} md={8}>
             <Grid container>
@@ -129,15 +162,38 @@ const useStyles = makeStyles((theme) =>
       fontSize: '32px',
       color: '#000000',
       lineHeight: '33px',
+      [theme.breakpoints.down('md')]: {
+        fontSize: '18px',
+      },
       margin: 0,
     },
     headerLight: {
       color: '#9B9B9B',
     },
-    filterWrapper: {
+    filterIcon: {
+      padding: '0px',
+      [theme.breakpoints.up('md')]: {
+        display: 'none',
+      },
+    },
+    sortWrapper: {
       fontSize: '22px',
       lineHeight: '24px',
       color: '#9B9B9B',
+      [theme.breakpoints.down('md')]: {
+        display: 'none',
+      },
+    },
+    filterWrapper: {
+      position: 'relative',
+      [theme.breakpoints.down('md')]: {
+        position: 'fixed',
+        background: '#fff',
+        zIndex: 1,
+        width: '100%',
+        bottom: 0,
+        padding: '15px 0px 0px',
+      },
     },
     sortIcon: {
       width: '50px',
@@ -165,6 +221,11 @@ const useStyles = makeStyles((theme) =>
       minHeight: '390.67px',
       padding: '0rem 1rem 2rem !important',
       //   marginBottom: '1rem',
+    },
+    cancelIcon: {
+      position: 'absolute',
+      right: '0px',
+      top: '0px',
     },
   })
 );

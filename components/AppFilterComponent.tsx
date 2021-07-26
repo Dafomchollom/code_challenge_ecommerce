@@ -1,20 +1,18 @@
 import React, { ChangeEvent } from 'react';
-import {
-  makeStyles,
-  createStyles,
-  Checkbox,
-  FormControlLabel,
-} from '@material-ui/core';
+import { makeStyles, createStyles, IconButton } from '@material-ui/core';
 import { Categories, PriceRange } from '../utils/interfaces';
 import AppCheckBoxInput from '../components/AppCheckBoxInput';
+import Image from 'next/image';
 interface AppFilterInterface {
   categories: Categories[];
   priceRange: PriceRange[];
+  onCancel?: () => void;
 }
 
 const AppFilterComponent: React.FC<AppFilterInterface> = ({
   categories,
   priceRange,
+  onCancel,
 }) => {
   // styles
   const classes = useStyles();
@@ -72,11 +70,20 @@ const AppFilterComponent: React.FC<AppFilterInterface> = ({
   React.useEffect(() => {
     arrayCategoriesMutationHandler(categories);
     arrayPriceMutationHandler(priceRange);
-  }, [categories]);
+  }, [categories, priceRange]);
   return (
     <div className={classes.root}>
+      <IconButton
+        edge="start"
+        className={classes.cancelIcon}
+        color="inherit"
+        aria-label="menu"
+        onClick={onCancel}
+      >
+        <Image src="/images/cancelIcon.svg" width={20} height={20} alt="" />
+      </IconButton>
       <h3 className={classes.title}>Category</h3>
-      <ul className={classes.listStyle}>
+      <ul className={`${classes.listStyle} ${classes.onMobile}`}>
         {mutatedList?.map((item, index) => (
           <AppCheckBoxInput
             key={index}
@@ -100,7 +107,9 @@ const AppFilterComponent: React.FC<AppFilterInterface> = ({
 };
 const useStyles = makeStyles((theme) =>
   createStyles({
-    root: {},
+    root: {
+      position: 'relative',
+    },
     title: {
       fontSize: '22px',
       lineHeight: '24px',
@@ -121,6 +130,19 @@ const useStyles = makeStyles((theme) =>
     listStyle: {
       listStyle: 'none',
       padding: '0px',
+    },
+    onMobile: {
+      [theme.breakpoints.down('sm')]: {
+        borderBottom: '2px solid #C2C2C2',
+      },
+    },
+    cancelIcon: {
+      position: 'absolute',
+      right: '15px',
+      top: '-10px',
+      [theme.breakpoints.up('sm')]: {
+        display: 'none',
+      },
     },
   })
 );
