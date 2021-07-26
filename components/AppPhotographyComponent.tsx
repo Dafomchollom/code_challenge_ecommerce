@@ -55,9 +55,11 @@ const AppPhotographyComponent: React.FC<AppPhotographyInterface> = ({
     } else if ((data = 'alpha')) {
       const data = mutatProductsList.slice(0).sort((a, b) => {
         if (b.name > a.name) {
-          return -1;
+          return -1 as number;
         } else if (a.name > b.name) {
-          return 1;
+          return 1 as number;
+        } else {
+          return 0;
         }
       });
       setMutatProductsList(data);
@@ -67,11 +69,13 @@ const AppPhotographyComponent: React.FC<AppPhotographyInterface> = ({
   };
   const [sort, setIsSort] = React.useState(false);
   const sortOrderFunction = (action: boolean) => {
-    const data = mutatProductsList.slice(0).sort(() => {
+    const data = mutatProductsList.slice(0).sort((a, b) => {
       if (action) {
-        return -1;
+        return -1 as number;
       } else if (!action) {
-        return 1;
+        return 1 as number;
+      } else {
+        return 0;
       }
     });
     setMutatProductsList(data);

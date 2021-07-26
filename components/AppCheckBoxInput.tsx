@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles, createStyles } from '@material-ui/core';
 interface AppCheckBoxInterface {
   //   id: string;
-  handleCheckChieldElement: (data: any) => void;
+  handleCheckChieldElement: (data: React.ChangeEvent<HTMLInputElement>) => void;
   isChecked?: boolean;
   name: string;
 }
@@ -14,7 +14,7 @@ const CheckBox: React.FC<AppCheckBoxInterface> = (props) => {
   return (
     <li className={classes.listWrapper}>
       <input
-        onClick={handleCheckChieldElement}
+        onChange={handleCheckChieldElement}
         type="checkbox"
         checked={isChecked}
         value={name}

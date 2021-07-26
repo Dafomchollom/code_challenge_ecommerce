@@ -41,7 +41,9 @@ const AppFilterComponent: React.FC<AppFilterInterface> = ({
     }
   };
   // handleCheckChieldElement
-  const handleCheckChieldElement = (event) => {
+  const handleCheckChieldElement = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const data = [...mutatedList];
     data.forEach((catergory, index, arr) => {
       if (catergory.name === event.target.value) {
@@ -55,9 +57,11 @@ const AppFilterComponent: React.FC<AppFilterInterface> = ({
     setIsMutatedList(data);
   };
   // price handle click function
-  const handleCheckChieldElementUnique = (event) => {
+  const handleCheckChieldElementUnique = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const data = mutatedPriceList.map((catergory) =>
-      catergory.name === event.target.value
+      catergory.name === event?.target?.value
         ? {
             ...catergory,
             isChecked: event.target.checked,

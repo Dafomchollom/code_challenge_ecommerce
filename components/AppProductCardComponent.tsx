@@ -33,13 +33,15 @@ const AppProductCardComponent: React.FC<AppProductCardComponent> = ({
         onMouseEnter={() => setIsHover(true)}
         onMouseLeave={() => setIsHover(false)}
       >
-        <Image
-          src={product ? product?.image?.src : img?.src}
-          alt="Picture of the author"
-          layout="fill"
-          objectFit="cover"
-          className={classes.image}
-        />
+        {(product || img) && (
+          <Image
+            src={product ? product?.image?.src : img?.src ? img?.src : ''}
+            alt="Picture of the author"
+            layout="fill"
+            objectFit="cover"
+            className={classes.image}
+          />
+        )}
         {product?.bestseller && (
           <span className={classes.bestSeller}>Best Seller</span>
         )}
