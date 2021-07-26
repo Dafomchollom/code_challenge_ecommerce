@@ -23,12 +23,29 @@ const getCategories = async (): Promise<Array<Categories>> => {
   return result;
 };
 // fetch products function
-const getProducts = async (): Promise<ProductPromise> => {
-  // let result = [];
+const getProducts = async (
+  categories?: string[],
+  prices?: number[]
+): Promise<ProductPromise> => {
   let result: ProductInterface[] = [];
-  await firestore
-    .collection('Products')
-    // .where('category', 'in', ['people', 'landmarks'])
+
+  const filterRef =
+    categories?.length && !prices?.length
+      ? firestore.collection('Products').where('category', 'in', categories)
+      : !categories?.length && prices?.length
+      ? firestore
+          .collection('Products')
+          .where('price', '<=', prices[prices.length - 1])
+          .where('price', '>=', prices[0])
+      : categories?.length && prices?.length
+      ? firestore
+          .collection('Products')
+          .where('price', '<=', prices[prices.length - 1])
+          .where('price', '>=', prices[0])
+          .where('category', 'in', categories)
+      : firestore.collection('Products');
+
+  await filterRef
     .get()
     .then((snapshot) => {
       snapshot.docs.forEach((item) => {

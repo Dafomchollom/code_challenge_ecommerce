@@ -51,7 +51,6 @@ const AppPhotographyComponent: React.FC<AppPhotographyInterface> = ({
   const sortProducts = (data: string) => {
     if (data === 'price') {
       const data = mutatProductsList.slice(0).sort((a, b) => a.price - b.price);
-      console.log(data, ':::: sorted by price :::');
       setMutatProductsList(data);
     } else if ((data = 'alpha')) {
       const data = mutatProductsList.slice(0).sort((a, b) => {
@@ -65,6 +64,18 @@ const AppPhotographyComponent: React.FC<AppPhotographyInterface> = ({
     } else {
       setMutatProductsList(products);
     }
+  };
+  const [sort, setIsSort] = React.useState(false);
+  const sortOrderFunction = (action: boolean) => {
+    const data = mutatProductsList.slice(0).sort(() => {
+      if (action) {
+        return -1;
+      } else if (!action) {
+        return 1;
+      }
+    });
+    setMutatProductsList(data);
+    setIsSort(action);
   };
   // sort product function
   const sortProductsHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -102,6 +113,7 @@ const AppPhotographyComponent: React.FC<AppPhotographyInterface> = ({
             className={classes.sortIcon}
             color="inherit"
             aria-label="menu"
+            onClick={() => sortOrderFunction(!sort)}
           >
             <Image
               src="/images/sortIcon.svg"
@@ -205,13 +217,15 @@ const useStyles = makeStyles((theme) =>
     },
     filterWrapper: {
       position: 'relative',
+      width: '100%',
       [theme.breakpoints.down('md')]: {
         position: 'fixed',
         background: '#fff',
         zIndex: 1,
-        width: '100%',
         bottom: 0,
-        padding: '15px 0px 0px',
+        right: 0,
+        left: 0,
+        padding: '15px 15px 0px',
       },
     },
     sortIcon: {

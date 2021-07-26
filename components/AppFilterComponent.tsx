@@ -3,6 +3,10 @@ import { makeStyles, createStyles, IconButton } from '@material-ui/core';
 import { Categories, PriceRange } from '../utils/interfaces';
 import AppCheckBoxInput from '../components/AppCheckBoxInput';
 import Image from 'next/image';
+import { getProducts } from '../utils/products';
+import { populateProductsStore } from '../store/productsReducers';
+import Store from '../store/store';
+
 interface AppFilterInterface {
   categories: Categories[];
   priceRange: PriceRange[];
@@ -48,7 +52,6 @@ const AppFilterComponent: React.FC<AppFilterInterface> = ({
       }
     });
 
-    console.log(data, ':::: check data ::::');
     setIsMutatedList(data);
   };
   // price handle click function
@@ -66,11 +69,31 @@ const AppFilterComponent: React.FC<AppFilterInterface> = ({
     );
     setIsMutatedPriceList(data);
   };
+  // filterFunctionhandler
+  const filterFunctionHandler = () => {
+    // get active categories
+    const catergories = mutatedList
+      .filter((item) => item.isChecked)
+      .map((item) => item.name);
+    // get active price range
+    const priceList = mutatedPriceList
+      .filter((item) => item.isChecked)
+      .map((item) => item.value);
+    getProducts(catergories, ...priceList).then((data) =>
+      Store.dispatch(populateProductsStore(data))
+    );
+  };
+  // clear filter
+  const clearFilter = () => {
+    arrayCategoriesMutationHandler(categories);
+    arrayPriceMutationHandler(priceRange);
+  };
   // mutate categories on mounted
   React.useEffect(() => {
     arrayCategoriesMutationHandler(categories);
     arrayPriceMutationHandler(priceRange);
   }, [categories, priceRange]);
+
   return (
     <div className={classes.root}>
       <IconButton
@@ -102,6 +125,17 @@ const AppFilterComponent: React.FC<AppFilterInterface> = ({
           />
         ))}
       </ul>
+      <div className={classes.btnWrapper}>
+        <button
+          className={classes.save}
+          onClick={() => filterFunctionHandler()}
+        >
+          Apply
+        </button>
+        <button className={classes.clearBtn} onClick={() => clearFilter()}>
+          Cancel
+        </button>
+      </div>
     </div>
   );
 };
@@ -143,6 +177,30 @@ const useStyles = makeStyles((theme) =>
       [theme.breakpoints.up('sm')]: {
         display: 'none',
       },
+    },
+    clearBtn: {
+      background: '#FFFFFF',
+      border: '2px solid #000000',
+      width: '100%',
+      fontSize: '15px',
+      padding: '5px',
+      cursor: 'pointer',
+      margin: '0px 5px',
+    },
+    save: {
+      background: '#000000',
+      border: '2px solid #000000',
+      color: '#ffff',
+      width: '100%',
+      fontSize: '15px',
+      padding: '5px',
+      cursor: 'pointer',
+      margin: '0px 5px',
+    },
+    btnWrapper: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      padding: '10px 0px 20px',
     },
   })
 );

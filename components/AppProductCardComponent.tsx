@@ -18,7 +18,7 @@ const AppProductCardComponent: React.FC<AppProductCardComponent> = ({
   // isHover state
   const [isHover, setIsHover] = React.useState<boolean>(false);
   // add to cart function
-  const addToCartHandler = (item: ProductInterface) => {
+  const addToCartHandler = (item: ProductInterface | undefined) => {
     if (item && !productExist(item.id)) {
       const dispatch = Store.dispatch;
       dispatch(populateCartStore(item));

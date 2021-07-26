@@ -1,9 +1,10 @@
 import React from 'react';
-// import Head from 'next/head';
-// import Image from 'next/image';
-// import styles from '../styles/Home.module.css';
 import dynamic from 'next/dynamic';
 import { Container } from '@material-ui/core';
+
+import { ProductInterface, Categories, PriceRange } from '../utils/interfaces';
+import { getProducts, getCategories } from '../utils/products';
+import Store from '../store/store';
 const AppNavBarComponent = dynamic(
   () => import('../components/AppNavBarComponent'),
   { ssr: false }
@@ -16,13 +17,6 @@ const AppPhotographyComponent = dynamic(
   () => import('../components/AppPhotographyComponent'),
   { ssr: false }
 );
-interface Employee {
-  name: string;
-  description: '';
-}
-import { ProductInterface, Categories, PriceRange } from '../utils/interfaces';
-import { getProducts, getCategories } from '../utils/products';
-import Store from '../store/store';
 export default function Home() {
   // products and category states
   const [products, setProducts] = React.useState<Array<ProductInterface>>([]);
@@ -48,6 +42,11 @@ export default function Home() {
     });
     getCategories().then((data) => setcategories(data));
   }, []);
+
+  Store.subscribe(() => {
+    const { products } = Store.getState().productsList;
+    productHandler(products.products);
+  });
   return (
     <Container maxWidth="lg">
       <AppNavBarComponent />

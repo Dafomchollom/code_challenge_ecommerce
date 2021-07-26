@@ -43,6 +43,7 @@ export interface Categories {
 export interface PriceRange {
   name: string;
   value: number[];
+  isChecked?: boolean;
 }
 // product promise interface
 export interface ProductPromise {

@@ -26,7 +26,6 @@ const AppNavBarComponent: React.FC<AppNavBarInterface> = ({}) => {
     const { cart } = Store.getState().cart;
     setCartState(cart);
     if (cart.length) setIsActive(true);
-    console.log(cart, ':::: cart::: ');
   });
   // clear store handler
   const clearStorehandler = () => {

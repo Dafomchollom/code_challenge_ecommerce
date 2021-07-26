@@ -79,7 +79,7 @@ const useStyles = makeStyles((theme) =>
       background: '#000000',
       color: '#fff',
       position: 'absolute',
-      top: '7.5%',
+      top: '6.5%',
       right: '0',
       transition: 'all 0.5s',
       cursor: 'pointer',
@@ -114,7 +114,7 @@ const useStyles = makeStyles((theme) =>
     },
     badge: {
       position: 'absolute',
-      bottom: '0',
+      bottom: '-5px',
       left: '0',
       zIndex: 1,
       padding: '1.2rem 3.5rem',
