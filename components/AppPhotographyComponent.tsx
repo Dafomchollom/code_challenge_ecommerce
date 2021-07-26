@@ -4,6 +4,8 @@ import AppProductCardComponent from './AppProductCardComponent';
 import Image from 'next/image';
 import { ProductInterface, Categories, PriceRange } from '../utils/interfaces';
 import AppFilterComponent from '../components/AppFilterComponent';
+import AppPagination from '../components/AppPagination';
+
 interface AppPhotographyInterface {
   products: ProductInterface[];
   categories: Categories[];
@@ -16,14 +18,35 @@ const AppPhotographyComponent: React.FC<AppPhotographyInterface> = ({
 }) => {
   // styles
   const classes = useStyles();
+
   // sort state
   const [sortString, setSortString] = React.useState<string>('none');
+
   // sort state
   const [isFilter, setFilterState] = React.useState<Boolean>(true);
+
   // sort state
   const [mutatProductsList, setMutatProductsList] = React.useState<
     Array<ProductInterface>
   >([]);
+
+  // pagination state
+  const [currentPage, setCurrentPage] = React.useState<number>(1);
+  //  posts per page state
+  const [postsPerPage] = React.useState<number>(6);
+
+  // pagination
+  // Get Current product posts
+  const indexOfLastPost = currentPage * postsPerPage;
+
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+
+  const currentPosts = mutatProductsList.slice(
+    indexOfFirstPost,
+    indexOfLastPost
+  );
+  // Change page handler
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
   //sort array function
   const sortProducts = (data: string) => {
     if (data === 'price') {
@@ -48,8 +71,11 @@ const AppPhotographyComponent: React.FC<AppPhotographyInterface> = ({
     sortProducts(e.target.value);
     setSortString(e.target.value);
   };
-  // filter options
-  const filterHandler = () => {};
+  // pagination click handler
+  const clickHandler = (action: string) => {
+    if (action === 'prev') setCurrentPage(currentPage - 1);
+    else if (action === 'next') setCurrentPage(currentPage + 1);
+  };
   React.useEffect(() => {
     setMutatProductsList(products);
     // sortProducts(sortString);
@@ -104,20 +130,6 @@ const AppPhotographyComponent: React.FC<AppPhotographyInterface> = ({
               className={classes.filterWrapper}
               style={{ display: isFilter ? 'inline-block' : 'none' }}
             >
-              {/* <IconButton
-                edge="start"
-                className={classes.cancelIcon}
-                color="inherit"
-                aria-label="menu"
-                // onClick={() => removeItemhandler(item.id)}
-              >
-                <Image
-                  src="/images/cancelIcon.svg"
-                  width={15}
-                  height={15}
-                  alt=""
-                />
-              </IconButton> */}
               <AppFilterComponent
                 categories={categories}
                 priceRange={priceRange}
@@ -125,9 +137,9 @@ const AppPhotographyComponent: React.FC<AppPhotographyInterface> = ({
               />
             </div>
           </Grid>
-          <Grid item sm={12} md={8}>
+          <Grid item xs={12} sm={12} md={8}>
             <Grid container>
-              {mutatProductsList.map((product, index) => (
+              {currentPosts.map((product, index) => (
                 <React.Fragment key={index}>
                   <Grid
                     item
@@ -143,6 +155,13 @@ const AppPhotographyComponent: React.FC<AppPhotographyInterface> = ({
                 </React.Fragment>
               ))}
             </Grid>
+            <AppPagination
+              postsPerPage={postsPerPage}
+              totalPosts={products.length}
+              currentPage={currentPage}
+              paginate={paginate}
+              onNavclick={clickHandler}
+            />
           </Grid>
         </Grid>
       </div>

@@ -24,10 +24,14 @@ import { ProductInterface, Categories, PriceRange } from '../utils/interfaces';
 import { getProducts, getCategories } from '../utils/products';
 import Store from '../store/store';
 export default function Home() {
+  // products and category states
   const [products, setProducts] = React.useState<Array<ProductInterface>>([]);
+
   const [featuredProducts, setFeaturedProducts] =
     React.useState<ProductInterface>();
+
   const [categories, setcategories] = React.useState<Array<Categories>>([]);
+
   const [priceRange, setPriceRange] = React.useState<Array<PriceRange>>([]);
 
   // products handler to set products and featured products
@@ -36,6 +40,7 @@ export default function Home() {
     setFeaturedProducts(featdProduct);
     setProducts(prod);
   };
+
   React.useEffect(() => {
     getProducts().then((data) => {
       productHandler(data?.products);

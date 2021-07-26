@@ -48,7 +48,7 @@ const AppFilterComponent: React.FC<AppFilterInterface> = ({
       }
     });
 
-    // console.log(data, ':::: check data ::::');
+    console.log(data, ':::: check data ::::');
     setIsMutatedList(data);
   };
   // price handle click function
