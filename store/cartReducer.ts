@@ -8,6 +8,7 @@ export const cartSlice = createSlice({
   reducers: {
     populateCartStore: (state, { payload }) => {
       state.cart.push(payload);
+      // console.log(payload, ':::: state.cart :::');
     },
     clearStore: (state) => {
       state.cart = [] as ProductInterface[];

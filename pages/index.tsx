@@ -30,9 +30,11 @@ export default function Home() {
 
   // products handler to set products and featured products
   const productHandler = (prod: ProductInterface[]) => {
-    const featdProduct = prod.find((item) => item.featured);
-    setFeaturedProducts(featdProduct);
-    setProducts(prod);
+    if (prod) {
+      const featdProduct = prod?.find((item) => item.featured);
+      setFeaturedProducts(featdProduct);
+      setProducts(prod);
+    }
   };
 
   React.useEffect(() => {

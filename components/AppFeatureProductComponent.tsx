@@ -1,15 +1,29 @@
 import React from 'react';
 import Image from 'next/image';
-import { IconButton, makeStyles, createStyles, Grid } from '@material-ui/core';
+import { makeStyles, createStyles, Grid } from '@material-ui/core';
 import AppRecommendationComponent from './AppRecommendationComponent';
 import { ProductInterface } from '../utils/interfaces';
+import Store from '../store/store';
+import { populateCartStore } from '../store/cartReducer';
+import { productExist } from '../utils/products';
 interface AppFeatureInterface {
   productObj: ProductInterface | undefined;
 }
 const AppFeatureProductComponent: React.FC<AppFeatureInterface> = ({
   productObj,
 }) => {
+  // Styles
   const classes = useStyles();
+  // add to cart function
+  const addToCartHandler = (item: ProductInterface) => {
+    console.log(item, '::: item ::::');
+    if (item && !productExist(item.id)) {
+      const dispatch = Store.dispatch;
+      dispatch(populateCartStore(item));
+    } else {
+      alert('product already exists');
+    }
+  };
   return (
     <div className={classes.root}>
       <div className={classes.headerWrapper}>
@@ -29,7 +43,12 @@ const AppFeatureProductComponent: React.FC<AppFeatureInterface> = ({
           )}
           <span className={classes.badge}>Photo of the day</span>
         </div>
-        <button className={classes.addToCartBtn}>ADD TO CART</button>
+        <button
+          className={classes.addToCartBtn}
+          onClick={() => addToCartHandler(productObj as ProductInterface)}
+        >
+          ADD TO CART
+        </button>
         <div className={classes.discriptionWrapper}>
           <Grid container spacing={4} justifyContent="space-between">
             <Grid sm={12} md={6} item>
