@@ -20,14 +20,31 @@ export interface Details {
   description?: string;
   recommendations?: Recommendations[];
 }
-// Featured product Interface
-export interface AppFeatureProductInterface {
-  productObj: {
-    name: string;
-    category: string;
-    price: number;
-    currency: string;
-    image: Images;
-    details?: Details;
-  };
+// product Interface
+export interface ProductInterface {
+  name: string;
+  category: string;
+  price: number;
+  currency: string;
+  image: Images;
+  details?: Details | null;
+  featured: boolean;
+  bestseller: boolean;
+}
+// category interface
+export interface Categories {
+  name: string;
+  description: string;
+  isChecked?: boolean;
+}
+
+// price range interface
+export interface PriceRange {
+  name: string;
+  value: number[];
+}
+// product promise interface
+export interface ProductPromise {
+  products: ProductInterface[];
+  priceRange: PriceRange[];
 }

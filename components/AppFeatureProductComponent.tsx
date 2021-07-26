@@ -2,9 +2,11 @@ import React from 'react';
 import Image from 'next/image';
 import { IconButton, makeStyles, createStyles, Grid } from '@material-ui/core';
 import AppRecommendationComponent from './AppRecommendationComponent';
-import { AppFeatureProductInterface } from '../utils/interfaces';
-
-const AppFeatureProductComponent: React.FC<AppFeatureProductInterface> = ({
+import { ProductInterface } from '../utils/interfaces';
+interface AppFeatureInterface {
+  productObj: ProductInterface | undefined;
+}
+const AppFeatureProductComponent: React.FC<AppFeatureInterface> = ({
   productObj,
 }) => {
   const classes = useStyles();
@@ -15,20 +17,22 @@ const AppFeatureProductComponent: React.FC<AppFeatureProductInterface> = ({
       </div>
       <div className={classes.productBodyWrapper}>
         <div className={classes.imageWrapper}>
-          <Image
-            src="/images/dog.png"
-            alt="Picture of the author"
-            layout="fill"
-            objectFit="cover"
-            // width="100%"
-            // height={25.22}
-          />
+          {productObj?.image && (
+            <Image
+              src={productObj?.image?.src}
+              alt="Picture of the author"
+              layout="fill"
+              objectFit="cover"
+              // width="100%"
+              // height={25.22}
+            />
+          )}
           <span className={classes.badge}>Photo of the day</span>
         </div>
         <button className={classes.addToCartBtn}>ADD TO CART</button>
         <div className={classes.discriptionWrapper}>
-          <Grid container justifyContent="space-between">
-            <Grid sm={12} md={7} item>
+          <Grid container spacing={4} justifyContent="space-between">
+            <Grid sm={12} md={6} item>
               <h3 className="bold_text">About the {productObj?.name}</h3>
               <h4 className={classes.category}>{productObj?.category}</h4>
               <p className={classes.discription}>
@@ -44,7 +48,7 @@ const AppFeatureProductComponent: React.FC<AppFeatureProductInterface> = ({
                 {productObj?.details?.description}
               </p>
             </Grid>
-            <Grid sm={12} md={4} item style={{ display: 'flex' }}>
+            <Grid sm={12} md={5} item style={{ display: 'flex' }}>
               {/* <Grid container spacing={2} justifyContent="space-between"></Grid> */}
               <AppRecommendationComponent details={productObj?.details} />
             </Grid>
@@ -95,6 +99,7 @@ const useStyles = makeStyles((theme) =>
       fontSize: '18px',
       color: '#656565',
       lineHeight: '27px',
+      wordSpacing: '3px',
     },
     category: {
       color: '#656565',

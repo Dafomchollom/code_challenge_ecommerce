@@ -1,10 +1,10 @@
 import React from 'react';
 import { Grid, makeStyles, createStyles } from '@material-ui/core';
 import AppProductCardComponent from './AppProductCardComponent';
-import { Details } from '../utils/interfaces';
+import { Details, Images } from '../utils/interfaces';
 
 interface AppRecommendationInterface {
-  details?: Details;
+  details?: Details | null;
 }
 const AppRecommendationComponent: React.FC<AppRecommendationInterface> = ({
   details,
@@ -20,14 +20,14 @@ const AppRecommendationComponent: React.FC<AppRecommendationInterface> = ({
       <Grid item xs={12}>
         <h3 className="bold_text">People also buy</h3>
       </Grid>
-      {[1, 2, 3].map((item, index) => (
-        <>
-          <Grid item xs={4} key={index}>
+      {details?.recommendations?.map((item, index) => (
+        <React.Fragment key={index}>
+          <Grid item xs={4}>
             <div className={classes.productCardWrapper}>
-              <AppProductCardComponent />
+              <AppProductCardComponent img={item as Images} />
             </div>
           </Grid>
-        </>
+        </React.Fragment>
       ))}
       <Grid item xs={12}>
         <div className="details_wrapper">

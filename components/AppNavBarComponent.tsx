@@ -22,7 +22,6 @@ const AppNavBarComponent: React.FC<AppNavBarInterface> = ({}) => {
         aria-label="menu"
         // onClick={props.onMenuClick}
       >
-        {/* <DashboardIcon size={24} style={{ color: '#9e9e9e' }} /> */}
         <Image
           src="/images/shopping-cart.svg"
           alt="Picture of the author"

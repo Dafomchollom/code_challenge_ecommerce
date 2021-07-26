@@ -1,59 +1,57 @@
-import Head from 'next/head';
-import Image from 'next/image';
-import styles from '../styles/Home.module.css';
+import React from 'react';
+// import Head from 'next/head';
+// import Image from 'next/image';
+// import styles from '../styles/Home.module.css';
 import dynamic from 'next/dynamic';
+import { Container } from '@material-ui/core';
 const AppNavBarComponent = dynamic(
   () => import('../components/AppNavBarComponent'),
-  {
-    ssr: false,
-  }
+  { ssr: false }
 );
 const AppFeatureProductComponent = dynamic(
   () => import('../components/AppFeatureProductComponent'),
-  {
-    ssr: false,
-  }
+  { ssr: false }
 );
+const AppPhotographyComponent = dynamic(
+  () => import('../components/AppPhotographyComponent'),
+  { ssr: false }
+);
+interface Employee {
+  name: string;
+  description: '';
+}
+import { ProductInterface, Categories, PriceRange } from '../utils/interfaces';
+import { getProducts, getCategories } from '../utils/products';
+import Store from '../store/store';
 export default function Home() {
-  const data = {
-    name: 'Samurai King Restling',
-    category: 'landmarks',
-    price: 101,
-    currency: 'USD',
-    image: {
-      src: '',
-      alt: '',
-    },
-    bestseller: false,
-    featured: true,
-    details: {
-      dimmentions: {
-        width: 1020,
-        height: 1020,
-      },
-      size: 15000,
-      description:
-        'So how did the classical Latin become so incoherent? According to McClintock, a 15th century typesetter likely',
-      recommendations: [
-        {
-          src: '',
-          alt: '',
-        },
-        {
-          src: '',
-          alt: '',
-        },
-        {
-          src: '',
-          alt: '',
-        },
-      ],
-    },
+  const [products, setProducts] = React.useState<Array<ProductInterface>>([]);
+  const [featuredProducts, setFeaturedProducts] =
+    React.useState<ProductInterface>();
+  const [categories, setcategories] = React.useState<Array<Categories>>([]);
+  const [priceRange, setPriceRange] = React.useState<Array<PriceRange>>([]);
+
+  // products handler to set products and featured products
+  const productHandler = (prod: ProductInterface[]) => {
+    const featdProduct = prod.find((item) => item.featured);
+    setFeaturedProducts(featdProduct);
+    setProducts(prod);
   };
+  React.useEffect(() => {
+    getProducts().then((data) => {
+      productHandler(data?.products);
+      setPriceRange(data?.priceRange);
+    });
+    getCategories().then((data) => setcategories(data));
+  }, []);
   return (
-    <div className="page_wrapper">
+    <Container maxWidth="lg">
       <AppNavBarComponent />
-      <AppFeatureProductComponent productObj={data} />
-    </div>
+      <AppFeatureProductComponent productObj={featuredProducts} />
+      <AppPhotographyComponent
+        products={products}
+        categories={categories}
+        priceRange={priceRange}
+      />
+    </Container>
   );
 }
