@@ -5,6 +5,7 @@ import {
   PriceRange,
   ProductPromise,
 } from './interfaces';
+import Store from '../store/store';
 // fetch categories function
 const getCategories = async (): Promise<Array<Categories>> => {
   let result: Categories[] = [];
@@ -59,5 +60,10 @@ const pricehandler = (data: ProductInterface[]) => {
   });
   return result;
 };
-
-export { getProducts, getCategories };
+// check if product exists in cart
+const productExist = (id: number) => {
+  const { cart } = Store.getState().cart;
+  const exist = cart.some((item) => item.id === id);
+  return exist;
+};
+export { getProducts, getCategories, productExist };

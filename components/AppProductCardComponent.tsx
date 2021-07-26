@@ -2,6 +2,9 @@ import React from 'react';
 import Image from 'next/image';
 import { makeStyles, createStyles } from '@material-ui/core';
 import { ProductInterface, Images } from '../utils/interfaces';
+import Store from '../store/store';
+import { populateCartStore } from '../store/cartReducer';
+import { productExist } from '../utils/products';
 interface AppProductCardComponent {
   product?: ProductInterface;
   img?: Images;
@@ -14,6 +17,15 @@ const AppProductCardComponent: React.FC<AppProductCardComponent> = ({
   const classes = useStyles();
   // isHover state
   const [isHover, setIsHover] = React.useState<boolean>(false);
+  // add to cart function
+  const addToCartHandler = (item: ProductInterface) => {
+    if (item && !productExist(item.id)) {
+      const dispatch = Store.dispatch;
+      dispatch(populateCartStore(item));
+    } else {
+      alert('product already exists');
+    }
+  };
   return (
     <div className={classes.root}>
       <div
@@ -31,7 +43,10 @@ const AppProductCardComponent: React.FC<AppProductCardComponent> = ({
         {product?.bestseller && (
           <span className={classes.bestSeller}>Best Seller</span>
         )}
-        <button className={`${classes.cartBtn} ${isHover && classes.isHover}`}>
+        <button
+          className={`${classes.cartBtn} ${isHover && classes.isHover}`}
+          onClick={() => addToCartHandler(product)}
+        >
           ADD TO CART
         </button>
       </div>

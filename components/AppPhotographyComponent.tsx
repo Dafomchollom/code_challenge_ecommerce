@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { IconButton, makeStyles, createStyles, Grid } from '@material-ui/core';
 import AppProductCardComponent from './AppProductCardComponent';
 import Image from 'next/image';
@@ -16,7 +16,40 @@ const AppPhotographyComponent: React.FC<AppPhotographyInterface> = ({
 }) => {
   // styles
   const classes = useStyles();
-
+  // sort state
+  const [sortString, setSortString] = React.useState<string>('none');
+  // sort state
+  const [mutatProductsList, setMutatProductsList] = React.useState<
+    Array<ProductInterface>
+  >([]);
+  //sort array function
+  const sortProducts = (data: string) => {
+    if (data === 'price') {
+      const data = mutatProductsList.slice(0).sort((a, b) => a.price - b.price);
+      console.log(data, ':::: sorted by price :::');
+      setMutatProductsList(data);
+    } else if ((data = 'alpha')) {
+      const data = mutatProductsList.slice(0).sort((a, b) => {
+        if (b.name > a.name) {
+          return -1;
+        } else if (a.name > b.name) {
+          return 1;
+        }
+      });
+      setMutatProductsList(data);
+    } else {
+      setMutatProductsList(products);
+    }
+  };
+  // sort product function
+  const sortProductsHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    sortProducts(e.target.value);
+    setSortString(e.target.value);
+  };
+  React.useEffect(() => {
+    setMutatProductsList(products);
+    // sortProducts(sortString);
+  }, [products]);
   return (
     <div className={classes.root}>
       <div className={classes.headerWrapper}>
@@ -39,9 +72,15 @@ const AppPhotographyComponent: React.FC<AppPhotographyInterface> = ({
             />
           </IconButton>
           <span>Sort By</span>
-          <select name="" className={classes.selectInput}>
-            <option>Price</option>
-            <option>Alphabetically</option>
+          <select
+            name=""
+            className={classes.selectInput}
+            onChange={sortProductsHandler}
+            value={sortString}
+          >
+            <option value="none">none</option>
+            <option value="name">Alphabetically</option>
+            <option value="price">Price</option>
           </select>
         </div>
       </div>
@@ -55,7 +94,7 @@ const AppPhotographyComponent: React.FC<AppPhotographyInterface> = ({
           </Grid>
           <Grid item sm={12} md={8}>
             <Grid container>
-              {products.map((product, index) => (
+              {mutatProductsList.map((product, index) => (
                 <React.Fragment key={index}>
                   <Grid
                     item
